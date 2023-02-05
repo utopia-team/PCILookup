@@ -21,7 +21,7 @@ def lookup(
             if (desc := line.split(maxsplit=1))[0] == device:
                 return desc[-1].replace("\n", "")
 
-    return ""
+    return 'Unknown device'
 
 
 def main():
@@ -33,11 +33,11 @@ def main():
     path_pci_ids = pathlib.Path(".") / "pci.ids"
 
     if not path.exists() or not path.is_file():
-        print(f"{path.name} not exist or isn't a file")
+        print(f'{path.name} not exist or isn\'t a file')
         sys.exit(1)
     
     if not path_pci_ids.exists():
-        print("pci.ids not exist")
+        print('pci.ids not exist')
         sys.exit(1)    
 
     with open(path, 'r') as f:
