@@ -2,6 +2,7 @@
 import pathlib
 import re
 import sys
+import zipfile
 
 
 def lookup(
@@ -30,21 +31,26 @@ def main():
         sys.exit(1)
 
     path = pathlib.Path(sys.argv[1])
-    path_pci_ids = pathlib.Path('.') / 'pci.ids'
+    path_pci_ids = pathlib.Path(__file__).parent / 'pci.ids'
 
     if not path.exists() or not path.is_file():
         print(f'{path.name} not exist or isn\'t a file')
         sys.exit(1)
     
-    if not path_pci_ids.exists():
+    if not path_pci_ids.exists() and not sys.argv[0].endswith(".pyz"):
         print('pci.ids not exist')
         sys.exit(1)    
 
     with open(path, 'r') as f:
         pciinfo_file = f.read()
 
-    with open(path_pci_ids, 'r') as f:
-        pci_ids = f.readlines()
+    if sys.argv[0].endswith(".pyz"):
+        with zipfile.ZipFile(sys.argv[0], 'r') as myzip:
+            with myzip.open('pci.ids', 'r') as f:
+                pci_ids = [x.decode("utf-8") for x in f.readlines()]
+    else:
+        with open(path_pci_ids, 'r') as f:
+            pci_ids = f.readlines()
 
     pci_list = [
         re.sub(r'\s+', ' ', x.strip())
