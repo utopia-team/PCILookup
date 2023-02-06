@@ -173,4 +173,7 @@ poetry.toml
 # PCIInfo.txt
 PCIInfo.txt
 
+# .pyz file
+*.pyz
+
 # End of https://www.toptal.com/developers/gitignore/api/python
